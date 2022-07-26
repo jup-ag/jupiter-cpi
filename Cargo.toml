@@ -1,0 +1,20 @@
+[package]
+name = "jupiter-cpi"
+version = "3.0.0"
+edition = "2021"
+description = "Anchor CPI client for the Jupiter program."
+authors = ["Siong Ong <siong@raccoons.dev>"]
+repository = "https://github.com/jup-ag/jupiter-cpi"
+license = "Apache-2.0"
+keywords = ["solana", "anchor", "cpi", "jupiter"]
+
+[features]
+default = ["cpi"]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+
+[dependencies]
+anchor-gen = "0.2.0"
+anchor-lang = ">=0.22.1"

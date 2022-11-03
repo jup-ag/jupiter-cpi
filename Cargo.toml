@@ -1,6 +1,6 @@
 [package]
 name = "jupiter-cpi"
-version = "4.0.0"
+version = "4.0.1"
 edition = "2021"
 description = "Anchor CPI client for the Jupiter program."
 authors = ["Siong Ong <siong@raccoons.dev>"]

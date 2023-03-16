@@ -17,5 +17,5 @@ cpi = ["no-entrypoint"]
 
 [dependencies]
 anchor-gen = "0.3.1"
-anchor-lang = "0.26.0"
-solana-program = "< 1.15"
+anchor-lang = "0.27.0"
+solana-program = "1.15.2"

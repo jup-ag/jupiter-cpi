@@ -10,7 +10,7 @@ pub mod jupiter_override {
     use anchor_lang::{AnchorSerialize, InstructionData};
     use std::io::Write;
 
-    #[derive(AnchorSerialize)]
+    #[derive(AnchorSerialize, AnchorDeserialize)]
     pub enum Swap {
         Saber,
         SaberAddDecimalsDeposit,
@@ -58,7 +58,33 @@ pub mod jupiter_override {
         }
     }
 
-    #[derive(AnchorSerialize)]
+    impl AnchorDeserialize for SwapLeg {
+        fn deserialize(buf: &mut &[u8]) -> std::io::Result<Self> {
+            let variant_idx: u8 = borsh::BorshDeserialize::deserialize(buf)?;
+            let return_value = match variant_idx {
+                0u8 => SwapLeg::Chain {
+                    swap_legs: borsh::BorshDeserialize::deserialize(buf)?,
+                },
+                1u8 => SwapLeg::Split {
+                    split_legs: borsh::BorshDeserialize::deserialize(buf)?,
+                },
+                2u8 => SwapLeg::Swap {
+                    swap: borsh::BorshDeserialize::deserialize(buf)?,
+                },
+                _ => {
+                    let msg =
+                        borsh::maybestd::format!("Unexpected variant index: {:?}", variant_idx);
+                    return Err(borsh::maybestd::io::Error::new(
+                        borsh::maybestd::io::ErrorKind::InvalidInput,
+                        msg,
+                    ));
+                }
+            };
+            Ok(return_value)
+        }
+    }
+
+    #[derive(AnchorSerialize, AnchorDeserialize)]
     pub struct Route {
         pub swap_leg: SwapLeg,
         pub in_amount: u64,

@@ -811,44 +811,69 @@
           "isSigner": false
         },
         {
-          "name": "pool",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "poolSigner",
+          "name": "clmmConfig",
           "isMut": false,
           "isSigner": false
         },
         {
-          "name": "userSourceTokenAccount",
+          "name": "clmmpool",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "userDestinationTokenAccount",
+          "name": "tokenA",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenB",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "accountA",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "poolSourceTokenAccount",
+          "name": "accountB",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "poolDestinationTokenAccount",
+          "name": "tokenAVault",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "poolTicksAccount",
+          "name": "tokenBVault",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "walletAuthority",
+          "name": "tickArrayMap",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "owner",
           "isMut": false,
           "isSigner": true
+        },
+        {
+          "name": "partner",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "partnerAtaA",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "partnerAtaB",
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "tokenProgram",
@@ -1855,6 +1880,270 @@
         }
       ],
       "args": []
+    },
+    {
+      "name": "lifinityV2Swap",
+      "accounts": [
+        {
+          "name": "swapProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "amm",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userTransferAuthority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "sourceInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "destinationInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "swapSource",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "swapDestination",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "poolMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "feeAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "oracleMainAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "oracleSubAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "oraclePcAccount",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "raydiumClmmSwap",
+      "accounts": [
+        {
+          "name": "swapProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "ammConfig",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "poolState",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "inputTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "outputTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "inputVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "outputVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "observationState",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tickArray",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "phoenixSwap",
+      "accounts": [
+        {
+          "name": "swapProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "logAuthority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "market",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "trader",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "baseAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "quoteAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "baseVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "quoteVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "symmetrySwap",
+      "accounts": [
+        {
+          "name": "swapProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "buyer",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "fundState",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "pdaAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pdaFromTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "buyerFromTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "pdaToTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "buyerToTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "swapFeeAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "hostFeeAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "managerFeeAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenInfo",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "prismData",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "types": [
@@ -2085,7 +2374,13 @@
             "name": "Raydium"
           },
           {
-            "name": "Crema"
+            "name": "Crema",
+            "fields": [
+              {
+                "name": "a_to_b",
+                "type": "bool"
+              }
+            ]
           },
           {
             "name": "Lifinity"
@@ -2188,6 +2483,47 @@
                 "type": {
                   "defined": "Side"
                 }
+              }
+            ]
+          },
+          {
+            "name": "LifinityV2"
+          },
+          {
+            "name": "RaydiumClmm"
+          },
+          {
+            "name": "Openbook",
+            "fields": [
+              {
+                "name": "side",
+                "type": {
+                  "defined": "Side"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Phoenix",
+            "fields": [
+              {
+                "name": "side",
+                "type": {
+                  "defined": "Side"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Symmetry",
+            "fields": [
+              {
+                "name": "fromTokenId",
+                "type": "u64"
+              },
+              {
+                "name": "toTokenId",
+                "type": "u64"
               }
             ]
           }

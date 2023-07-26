@@ -18,4 +18,8 @@ cpi = ["no-entrypoint"]
 [dependencies]
 anchor-gen = "0.3.1"
 anchor-lang = "0.26.0"
-solana-program = "< 1.15"
+solana-sdk = "1.14.17"
+solana-account-decoder = "1.14.17"
+
+jupiter-amm-interface = "0.2.0"
+rand = "0.8.5"

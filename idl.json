@@ -4,6 +4,7 @@
   "instructions": [
     {
       "name": "route",
+      "docs": ["route_plan Topologically sorted trade DAG"],
       "accounts": [
         {
           "name": "tokenProgram",
@@ -16,16 +17,40 @@
           "isSigner": true
         },
         {
-          "name": "destinationTokenAccount",
+          "name": "userSourceTokenAccount",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "userDestinationTokenAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "destinationTokenAccount",
+          "isMut": false,
+          "isSigner": false,
+          "isOptional": true
+        },
+        {
+          "name": "destinationMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "platformFeeAccount",
+          "isMut": true,
+          "isSigner": false,
+          "isOptional": true
         }
       ],
       "args": [
         {
-          "name": "swapLeg",
+          "name": "routePlan",
           "type": {
-            "defined": "SwapLeg"
+            "vec": {
+              "defined": "RoutePlanStep"
+            }
           }
         },
         {
@@ -44,92 +69,284 @@
           "name": "platformFeeBps",
           "type": "u8"
         }
-      ]
+      ],
+      "returns": "u64"
     },
     {
-      "name": "whirlpoolSwapExactOutput",
+      "name": "routeWithTokenLedger",
       "accounts": [
-        {
-          "name": "swapProgram",
-          "isMut": false,
-          "isSigner": false
-        },
         {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
         },
         {
-          "name": "tokenAuthority",
+          "name": "userTransferAuthority",
           "isMut": false,
           "isSigner": true
         },
         {
-          "name": "whirlpool",
-          "isMut": true,
+          "name": "userSourceTokenAccount",
+          "isMut": false,
           "isSigner": false
         },
         {
-          "name": "tokenOwnerAccountA",
-          "isMut": true,
+          "name": "userDestinationTokenAccount",
+          "isMut": false,
           "isSigner": false
         },
         {
-          "name": "tokenVaultA",
-          "isMut": true,
+          "name": "destinationTokenAccount",
+          "isMut": false,
+          "isSigner": false,
+          "isOptional": true
+        },
+        {
+          "name": "destinationMint",
+          "isMut": false,
           "isSigner": false
         },
         {
-          "name": "tokenOwnerAccountB",
+          "name": "platformFeeAccount",
           "isMut": true,
-          "isSigner": false
+          "isSigner": false,
+          "isOptional": true
         },
         {
-          "name": "tokenVaultB",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tickArray0",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tickArray1",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tickArray2",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "oracle",
+          "name": "tokenLedger",
           "isMut": false,
           "isSigner": false
         }
       ],
       "args": [
         {
-          "name": "outAmount",
-          "type": "u64"
-        },
-        {
-          "name": "inAmountWithSlippage",
+          "name": "routePlan",
           "type": {
-            "defined": "AmountWithSlippage"
+            "vec": {
+              "defined": "RoutePlanStep"
+            }
           }
         },
         {
-          "name": "aToB",
-          "type": "bool"
+          "name": "quotedOutAmount",
+          "type": "u64"
+        },
+        {
+          "name": "slippageBps",
+          "type": "u16"
         },
         {
           "name": "platformFeeBps",
           "type": "u8"
         }
-      ]
+      ],
+      "returns": "u64"
+    },
+    {
+      "name": "sharedAccountsRoute",
+      "docs": [
+        "Route by using program owned token accounts and open orders accounts."
+      ],
+      "accounts": [
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "programAuthority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "userTransferAuthority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "sourceTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programSourceTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programDestinationTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "destinationTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "sourceMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "destinationMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "platformFeeAccount",
+          "isMut": true,
+          "isSigner": false,
+          "isOptional": true
+        },
+        {
+          "name": "token2022Program",
+          "isMut": false,
+          "isSigner": false,
+          "isOptional": true
+        }
+      ],
+      "args": [
+        {
+          "name": "id",
+          "type": "u8"
+        },
+        {
+          "name": "routePlan",
+          "type": {
+            "vec": {
+              "defined": "RoutePlanStep"
+            }
+          }
+        },
+        {
+          "name": "inAmount",
+          "type": "u64"
+        },
+        {
+          "name": "quotedOutAmount",
+          "type": "u64"
+        },
+        {
+          "name": "slippageBps",
+          "type": "u16"
+        },
+        {
+          "name": "platformFeeBps",
+          "type": "u8"
+        }
+      ],
+      "returns": "u64"
+    },
+    {
+      "name": "sharedAccountsRouteWithTokenLedger",
+      "accounts": [
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "programAuthority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "userTransferAuthority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "sourceTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programSourceTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programDestinationTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "destinationTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "sourceMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "destinationMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "platformFeeAccount",
+          "isMut": true,
+          "isSigner": false,
+          "isOptional": true
+        },
+        {
+          "name": "token2022Program",
+          "isMut": false,
+          "isSigner": false,
+          "isOptional": true
+        },
+        {
+          "name": "tokenLedger",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "id",
+          "type": "u8"
+        },
+        {
+          "name": "routePlan",
+          "type": {
+            "vec": {
+              "defined": "RoutePlanStep"
+            }
+          }
+        },
+        {
+          "name": "quotedOutAmount",
+          "type": "u64"
+        },
+        {
+          "name": "slippageBps",
+          "type": "u16"
+        },
+        {
+          "name": "platformFeeBps",
+          "type": "u8"
+        }
+      ],
+      "returns": "u64"
+    },
+    {
+      "name": "setTokenLedger",
+      "accounts": [
+        {
+          "name": "tokenLedger",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     },
     {
       "name": "createOpenOrders",
@@ -168,6 +385,73 @@
       "args": []
     },
     {
+      "name": "createProgramOpenOrders",
+      "accounts": [
+        {
+          "name": "openOrders",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "programAuthority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "dexProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "id",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "createTokenLedger",
+      "accounts": [
+        {
+          "name": "tokenLedger",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "mercurialSwap",
       "accounts": [
         {
@@ -193,7 +477,7 @@
         {
           "name": "userTransferAuthority",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "sourceTokenAccount",
@@ -219,7 +503,7 @@
         {
           "name": "signer",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "factoryState",
@@ -325,7 +609,7 @@
         {
           "name": "authority",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "orderPayerTokenAccount",
@@ -442,7 +726,7 @@
         {
           "name": "owner",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "userUnderlyingTokens",
@@ -488,7 +772,7 @@
         {
           "name": "userTransferAuthority",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "source",
@@ -518,6 +802,87 @@
         {
           "name": "poolFee",
           "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "tokenSwapV2",
+      "accounts": [
+        {
+          "name": "swapProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "swap",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "userTransferAuthority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "source",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "swapSource",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "swapDestination",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "destination",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "poolMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "poolFee",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "sourceMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "destinationMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "sourceTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "destinationTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "poolTokenProgram",
+          "isMut": false,
           "isSigner": false
         }
       ],
@@ -605,7 +970,7 @@
         {
           "name": "userTransferAuthority",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "source",
@@ -671,7 +1036,7 @@
         {
           "name": "userTransferAuthority",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "source",
@@ -797,7 +1162,7 @@
         {
           "name": "userSourceOwner",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         }
       ],
       "args": []
@@ -858,7 +1223,7 @@
         {
           "name": "owner",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "partner",
@@ -904,7 +1269,7 @@
         {
           "name": "userTransferAuthority",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "sourceInfo",
@@ -1034,8 +1399,13 @@
         },
         {
           "name": "userTransferAuthority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "wsolMint",
@@ -1091,7 +1461,7 @@
         {
           "name": "getMsolFromAuthority",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "transferSolTo",
@@ -1157,7 +1527,7 @@
         {
           "name": "walletAuthority",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "userBaseTokenAccount",
@@ -1218,7 +1588,7 @@
         {
           "name": "walletAuthority",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "userBaseTokenAccount",
@@ -1259,7 +1629,7 @@
         {
           "name": "tokenAuthority",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "whirlpool",
@@ -1304,7 +1674,10 @@
         {
           "name": "oracle",
           "isMut": false,
-          "isSigner": false
+          "isSigner": false,
+          "docs": [
+            "Oracle is currently unused and will be enabled on subsequent updates"
+          ]
         }
       ],
       "args": []
@@ -1355,7 +1728,7 @@
         {
           "name": "owner",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "programAuthority",
@@ -1441,7 +1814,7 @@
         {
           "name": "user",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "vaultProgram",
@@ -1522,7 +1895,7 @@
         {
           "name": "userWallet",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "feeCollector",
@@ -1598,7 +1971,7 @@
         {
           "name": "userAuthority",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "tokenProgram",
@@ -1619,7 +1992,7 @@
         {
           "name": "authority",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "pool",
@@ -1745,7 +2118,7 @@
         {
           "name": "swapper",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "referrerXAccount",
@@ -1861,7 +2234,7 @@
         {
           "name": "signer",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "systemProgram",
@@ -1902,7 +2275,7 @@
         {
           "name": "userTransferAuthority",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "sourceInfo",
@@ -1968,7 +2341,7 @@
         {
           "name": "payer",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "ammConfig",
@@ -2039,7 +2412,7 @@
         {
           "name": "trader",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "baseAccount",
@@ -2080,7 +2453,7 @@
         {
           "name": "buyer",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "fundState",
@@ -2144,6 +2517,85 @@
         }
       ],
       "args": []
+    },
+    {
+      "name": "heliumTreasuryManagementRedeemV0",
+      "accounts": [
+        {
+          "name": "swapProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "treasuryManagement",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "treasuryMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "supplyMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "treasury",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "circuitBreaker",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "from",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "to",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "owner",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "circuitBreakerProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "TokenLedger",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tokenAccount",
+            "type": "publicKey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
     }
   ],
   "types": [
@@ -2164,53 +2616,27 @@
       }
     },
     {
-      "name": "SplitLegDeeper",
+      "name": "RoutePlanStep",
       "type": {
         "kind": "struct",
         "fields": [
+          {
+            "name": "swap",
+            "type": {
+              "defined": "Swap"
+            }
+          },
           {
             "name": "percent",
             "type": "u8"
           },
           {
-            "name": "swapLeg",
-            "type": {
-              "defined": "SwapLegSwap"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "SplitLeg",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "percent",
+            "name": "inputIndex",
             "type": "u8"
           },
           {
-            "name": "swapLeg",
-            "type": {
-              "defined": "SwapLegDeeper"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "SwapInstrution",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Swap",
-            "fields": [
-              {
-                "defined": "Swap"
-              }
-            ]
+            "name": "outputIndex",
+            "type": "u8"
           }
         ]
       }
@@ -2225,121 +2651,6 @@
           },
           {
             "name": "Ask"
-          }
-        ]
-      }
-    },
-    {
-      "name": "SwapLegSwap",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "PlaceholderOne"
-          },
-          {
-            "name": "PlaceholderTwo"
-          },
-          {
-            "name": "Swap",
-            "fields": [
-              {
-                "name": "swap",
-                "type": {
-                  "defined": "Swap"
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "name": "SwapLegDeeper",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Chain",
-            "fields": [
-              {
-                "name": "swap_legs",
-                "type": {
-                  "vec": {
-                    "defined": "SwapLegSwap"
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "name": "Split",
-            "fields": [
-              {
-                "name": "split_legs",
-                "type": {
-                  "vec": {
-                    "defined": "SplitLegDeeper"
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "name": "Swap",
-            "fields": [
-              {
-                "name": "swap",
-                "type": {
-                  "defined": "Swap"
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "name": "SwapLeg",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Chain",
-            "fields": [
-              {
-                "name": "swap_legs",
-                "type": {
-                  "vec": {
-                    "defined": "SwapLegDeeper"
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "name": "Split",
-            "fields": [
-              {
-                "name": "split_legs",
-                "type": {
-                  "vec": {
-                    "defined": "SplitLeg"
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "name": "Swap",
-            "fields": [
-              {
-                "name": "swap",
-                "type": {
-                  "defined": "Swap"
-                }
-              }
-            ]
           }
         ]
       }
@@ -2518,48 +2829,20 @@
             "name": "Symmetry",
             "fields": [
               {
-                "name": "fromTokenId",
+                "name": "from_token_id",
                 "type": "u64"
               },
               {
-                "name": "toTokenId",
+                "name": "to_token_id",
                 "type": "u64"
               }
             ]
-          }
-        ]
-      }
-    },
-    {
-      "name": "SwapAction",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "SetupSplit",
-            "fields": [
-              {
-                "name": "percents",
-                "type": "bytes"
-              }
-            ]
           },
           {
-            "name": "NextSplitLeg"
+            "name": "TokenSwapV2"
           },
           {
-            "name": "MergeSplit"
-          },
-          {
-            "name": "Swap",
-            "fields": [
-              {
-                "name": "swap",
-                "type": {
-                  "defined": "Swap"
-                }
-              }
-            ]
+            "name": "HeliumTreasuryManagementRedeemV0"
           }
         ]
       }
@@ -2567,7 +2850,7 @@
   ],
   "events": [
     {
-      "name": "Swap",
+      "name": "SwapEvent",
       "fields": [
         {
           "name": "amm",
@@ -2597,7 +2880,7 @@
       ]
     },
     {
-      "name": "Fee",
+      "name": "FeeEvent",
       "fields": [
         {
           "name": "account",
@@ -2650,18 +2933,53 @@
     },
     {
       "code": 6006,
-      "name": "InAmountsStackIsEmpty",
-      "msg": "In amounts stack is empty"
+      "name": "InvalidInputIndex",
+      "msg": "Token input index is invalid"
     },
     {
       "code": 6007,
-      "name": "OutAmountsStackIsEmpty",
-      "msg": "Out amounts stack is empty"
+      "name": "InvalidOutputIndex",
+      "msg": "Token output index is invalid"
     },
     {
       "code": 6008,
       "name": "NotEnoughAccountKeys",
       "msg": "Not Enough Account keys"
+    },
+    {
+      "code": 6009,
+      "name": "NonZeroMinimumOutAmountNotSupported",
+      "msg": "Non zero minimum out amount not supported"
+    },
+    {
+      "code": 6010,
+      "name": "InvalidRoutePlan",
+      "msg": "Invalid route plan"
+    },
+    {
+      "code": 6011,
+      "name": "InvalidReferralAuthority",
+      "msg": "Invalid referral authority"
+    },
+    {
+      "code": 6012,
+      "name": "LedgerTokenAccountDoesNotMatch",
+      "msg": "Token account doesn't match the ledger"
+    },
+    {
+      "code": 6013,
+      "name": "InvalidTokenLedger",
+      "msg": "Invalid token ledger"
+    },
+    {
+      "code": 6014,
+      "name": "IncorrectTokenProgramID",
+      "msg": "Token program ID is invalid"
+    },
+    {
+      "code": 6015,
+      "name": "TokenProgramNotProvided",
+      "msg": "Token program not provided"
     }
   ]
 }

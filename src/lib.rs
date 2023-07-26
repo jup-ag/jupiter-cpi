@@ -20,7 +20,9 @@ pub mod jupiter_override {
         Step,
         Cropper,
         Raydium,
-        Crema,
+        Crema {
+            a_to_b: bool,
+        },
         Lifinity,
         Mercurial,
         Cykura,

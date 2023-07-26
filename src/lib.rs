@@ -2,7 +2,6 @@ anchor_gen::generate_cpi_crate!("idl.json");
 
 anchor_lang::declare_id!("JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4");
 
-use accounts::Route;
 use rand::distributions::{Distribution, Uniform};
 use rand::seq::IteratorRandom;
 use solana_sdk::pubkey;
@@ -42,15 +41,81 @@ pub fn find_jupiter_open_orders(market: &Pubkey, authority: &Pubkey) -> Pubkey {
     .0
 }
 
-// impl From<&Vec<AccountMeta>> for Route {
-//     fn from(accounts: &Vec<AccountMeta>) -> Route {
-//         Route {
-//             token_program: accounts[0].pubkey,
-//             user_transfer_authority: accounts[1].pubkey,
-//             destination_token_account: accounts[2].pubkey,
-//         }
-//     }
-// }
+fn pubkey_or_none(pubkey: Pubkey) -> Option<Pubkey> {
+    // Anchor doesn't support Option<Pubkey> yet so if the pubkey is the program key itself
+    // it is a None.
+    if pubkey == self::ID {
+        None
+    } else {
+        Some(pubkey)
+    }
+}
+
+impl From<Vec<AccountMeta>> for accounts::Route {
+    fn from(accounts: Vec<AccountMeta>) -> accounts::Route {
+        accounts::Route {
+            token_program: accounts[0].pubkey,
+            user_transfer_authority: accounts[1].pubkey,
+            user_source_token_account: accounts[2].pubkey,
+            user_destination_token_account: accounts[3].pubkey,
+            destination_token_account: pubkey_or_none(accounts[4].pubkey),
+            destination_mint: accounts[5].pubkey,
+            platform_fee_account: pubkey_or_none(accounts[6].pubkey),
+        }
+    }
+}
+
+impl From<Vec<AccountMeta>> for accounts::RouteWithTokenLedger {
+    fn from(accounts: Vec<AccountMeta>) -> accounts::RouteWithTokenLedger {
+        accounts::RouteWithTokenLedger {
+            token_program: accounts[0].pubkey,
+            user_transfer_authority: accounts[1].pubkey,
+            user_source_token_account: accounts[2].pubkey,
+            user_destination_token_account: accounts[3].pubkey,
+            destination_token_account: pubkey_or_none(accounts[4].pubkey),
+            destination_mint: accounts[5].pubkey,
+            platform_fee_account: pubkey_or_none(accounts[6].pubkey),
+            token_ledger: accounts[7].pubkey,
+        }
+    }
+}
+
+impl From<Vec<AccountMeta>> for accounts::SharedAccountsRoute {
+    fn from(accounts: Vec<AccountMeta>) -> accounts::SharedAccountsRoute {
+        accounts::SharedAccountsRoute {
+            token_program: accounts[0].pubkey,
+            program_authority: accounts[1].pubkey,
+            user_transfer_authority: accounts[2].pubkey,
+            source_token_account: accounts[3].pubkey,
+            program_source_token_account: accounts[4].pubkey,
+            program_destination_token_account: accounts[5].pubkey,
+            destination_token_account: accounts[6].pubkey,
+            source_mint: accounts[7].pubkey,
+            destination_mint: accounts[8].pubkey,
+            platform_fee_account: pubkey_or_none(accounts[9].pubkey),
+            token2022_program: pubkey_or_none(accounts[10].pubkey),
+        }
+    }
+}
+
+impl From<Vec<AccountMeta>> for accounts::SharedAccountsRouteWithTokenLedger {
+    fn from(accounts: Vec<AccountMeta>) -> accounts::SharedAccountsRouteWithTokenLedger {
+        accounts::SharedAccountsRouteWithTokenLedger {
+            token_program: accounts[0].pubkey,
+            program_authority: accounts[1].pubkey,
+            user_transfer_authority: accounts[2].pubkey,
+            source_token_account: accounts[3].pubkey,
+            program_source_token_account: accounts[4].pubkey,
+            program_destination_token_account: accounts[5].pubkey,
+            destination_token_account: accounts[6].pubkey,
+            source_mint: accounts[7].pubkey,
+            destination_mint: accounts[8].pubkey,
+            platform_fee_account: pubkey_or_none(accounts[9].pubkey),
+            token2022_program: pubkey_or_none(accounts[10].pubkey),
+            token_ledger: accounts[11].pubkey,
+        }
+    }
+}
 
 // Temporarily redefined it until solution is found
 pub mod jupiter_override {

@@ -2,9 +2,9 @@ anchor_gen::generate_cpi_crate!("idl.json");
 
 anchor_lang::declare_id!("JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4");
 
-use rand::distributions::{Distribution, Uniform};
 use rand::seq::IteratorRandom;
-use solana_sdk::pubkey;
+use rand::Rng;
+use solana_program::pubkey;
 
 // Now, we only support up to 2 Authorities between [0, 1]. To create more authorities, we need to
 // add them in the monorepo. We can use from 0 up to 255 in order to prevent hot accounts.
@@ -13,8 +13,7 @@ pub const AUTHORITY_SEED: &[u8] = b"authority";
 
 pub fn find_jupiter_program_authority_id() -> u8 {
     let mut rng = rand::thread_rng();
-    let ids = Uniform::from(0..(PROGRAM_AUTHORITY_ID_MAX + 1));
-    ids.sample(&mut rng)
+    rng.gen_range(0..=PROGRAM_AUTHORITY_ID_MAX)
 }
 
 pub fn find_jupiter_program_authority(id: u8) -> Pubkey {
@@ -64,7 +63,7 @@ pub mod jupiter_override {
         pub platform_fee_bps: u8,
     }
     impl Discriminator for Route {
-        const DISCRIMINATOR: [u8; 8] = [229, 23, 203, 151, 122, 227, 173, 42];
+        const DISCRIMINATOR: [u8; 8] = super::instruction::Route::DISCRIMINATOR;
     }
 
     impl InstructionData for Route {}
@@ -77,7 +76,7 @@ pub mod jupiter_override {
         pub platform_fee_bps: u8,
     }
     impl Discriminator for RouteWithTokenLedger {
-        const DISCRIMINATOR: [u8; 8] = [150, 86, 71, 116, 167, 93, 14, 104];
+        const DISCRIMINATOR: [u8; 8] = super::instruction::RouteWithTokenLedger::DISCRIMINATOR;
     }
 
     impl InstructionData for RouteWithTokenLedger {}
@@ -92,7 +91,7 @@ pub mod jupiter_override {
         pub platform_fee_bps: u8,
     }
     impl Discriminator for SharedAccountsRoute {
-        const DISCRIMINATOR: [u8; 8] = [193, 32, 155, 51, 65, 214, 156, 129];
+        const DISCRIMINATOR: [u8; 8] = super::instruction::SharedAccountsRoute::DISCRIMINATOR;
     }
 
     impl InstructionData for SharedAccountsRoute {}
@@ -106,7 +105,8 @@ pub mod jupiter_override {
         pub platform_fee_bps: u8,
     }
     impl Discriminator for SharedAccountsRouteWithTokenLedger {
-        const DISCRIMINATOR: [u8; 8] = [230, 121, 143, 80, 119, 159, 106, 170];
+        const DISCRIMINATOR: [u8; 8] =
+            super::instruction::SharedAccountsRouteWithTokenLedger::DISCRIMINATOR;
     }
 
     impl InstructionData for SharedAccountsRouteWithTokenLedger {}

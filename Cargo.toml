@@ -17,9 +17,8 @@ cpi = ["no-entrypoint"]
 
 [dependencies]
 anchor-gen = { git = "https://github.com/jup-ag/anchor-gen.git", rev = "dae4c216b883ea089432ff5c00d100f4f662fd07" }
-anchor-lang = ">=0.28.0"
-solana-program = ">=1.16"
-solana-account-decoder = ">=1.16"
+anchor-lang = ">=0.27.0"
+solana-program = ">=1.14"
 jupiter-amm-interface = { path = "../jupiter-core-rs/jupiter-amm-interface" }
 #jupiter-amm-interface = "0.2.0"
 rand = "0.8.5"

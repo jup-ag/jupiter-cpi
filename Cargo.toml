@@ -1,6 +1,6 @@
 [package]
 name = "jupiter-cpi"
-version = "4.0.2"
+version = "6.0.0"
 edition = "2021"
 description = "Anchor CPI client for the Jupiter program."
 authors = ["Siong Ong <siong@raccoons.dev>"]
@@ -16,6 +16,8 @@ no-log-ix-name = []
 cpi = ["no-entrypoint"]
 
 [dependencies]
-anchor-gen = "0.3.1"
-anchor-lang = "0.26.0"
-solana-program = "< 1.15"
+anchor-gen = { git = "https://github.com/jup-ag/anchor-gen.git", rev = "dae4c216b883ea089432ff5c00d100f4f662fd07" }
+anchor-lang = ">=0.26.0"
+solana-program = ">=1.13"
+jupiter-amm-interface = "0.2.1"
+rand = "0.8.5"
